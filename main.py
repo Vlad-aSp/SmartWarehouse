@@ -1,5 +1,4 @@
 from product import Product
-from warehouse import Warehouse
 from database import Database
 from service import InventoryService
 
@@ -34,10 +33,8 @@ product3 = Product(
 #print(product.price)
 #print(product.is_low_stock())
 
-warehouse = Warehouse()
-warehouse.add_product(product)
-warehouse.add_product(product2)
-warehouse.add_product(product3)
+
+
 #print(warehouse.products)
 #print(len(warehouse.products))
 
