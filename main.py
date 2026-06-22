@@ -82,57 +82,9 @@ product3 = Product(
 
 #print (product)
 
-service = InventoryService()
-
-products = service.get_all_products()
-
-for product in products:
-    print(product)
-
-
-
+from service import InventoryService
 
 service = InventoryService()
-
-print("=== ALL PRODUCTS ===")
 
 for product in service.get_all_products():
     print(product)
-
-print("\n=== FIND PRODUCT BY ID ===")
-
-print(service.find_product_by_id(2))
-
-print("\n=== ADD STOCK ===")
-
-print("Before:")
-print(service.find_product_by_id(2))
-
-service.add_stock(2, 10)
-
-print("After:")
-print(service.find_product_by_id(2))
-
-print("\n=== SET STOCK ===")
-
-service.set_stock(2, 100)
-
-print(service.find_product_by_id(2))
-
-print("\n=== LOW STOCK TEST ===")
-
-service.set_stock(2, 2)
-
-for product in service.get_low_stock_products():
-    print(product)
-
-print("\n=== OUT OF STOCK TEST ===")
-
-service.set_stock(2, 0)
-
-for product in service.get_out_of_stock_products():
-    print(product)
-
-print("\n=== TOTAL INVENTORY VALUE ===")
-service.set_stock(2,50)
-print(service.get_total_inventory_value())
