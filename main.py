@@ -13,7 +13,7 @@ product2 = Product(
     2,
     "Mouse",
     "Electronics",
-    2,
+    0,
     100,
     5
 )
@@ -59,3 +59,10 @@ low_stock = warehouse.get_low_stock_products()
 for product in low_stock:
     print(product)
 
+print(warehouse.get_total_inventory_value())
+
+
+zero_stock = warehouse.get_out_of_stock_products()
+
+for product in zero_stock:
+    print(product)

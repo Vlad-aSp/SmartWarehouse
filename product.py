@@ -29,6 +29,10 @@ class Product:
          return self.quantity <= self.minimum_stock
     
 
+    """PRELUAM VALOAREA PRODUSULUI"""
+
+    def get_inventory_value(self):
+        return self.quantity * self.price     
     
 
 

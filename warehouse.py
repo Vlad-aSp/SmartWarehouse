@@ -62,5 +62,25 @@ class Warehouse:
                 low_stock_products.append(product)  #ADAUGA IN LISTA DE MAI SUS 
 
         return low_stock_products                   #RETUENEAZA LISTA
-            
-            
+
+
+    """Preia toate produsele din warehouse si face valoarea totala a inventarului"""
+
+
+    def get_total_inventory_value(self):
+        total_value = 0 
+
+        for product in self.products:               
+            total_value += product.get_inventory_value()        #VALOAREA TOTALA = FIECAREA PRODUS.CANTITATE * PRODUS.PRET
+        
+        return total_value
+    
+
+    def get_out_of_stock_products(self):
+        out_of_stock_products =[]
+
+        for product in self.products:
+            if product.quantity == 0:
+                out_of_stock_products.append(product)
+
+        return out_of_stock_products
