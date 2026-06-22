@@ -92,3 +92,27 @@ class InventoryService:
             total_value += product.get_inventory_value()
 
         return total_value
+    
+
+    def remove_stock(self, product_id, quantity_to_remove):
+        product = self.db.find_product_by_id(product_id)
+
+        if product:
+            new_quantity = product.quantity - quantity_to_remove
+
+            if new_quantity < 0:
+                return False
+
+            self.db.update_product_stock(
+                product_id,
+                new_quantity
+            )
+
+            return True
+
+        return False
+    
+    def product_exists(self, product_id):
+        product = self.db.find_product_by_id(product_id)
+
+        return product is not None
