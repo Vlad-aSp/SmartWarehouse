@@ -27,17 +27,17 @@ product3 = Product(
     5
 )
 
-print(product.name)
-print(product.quantity)
-print(product.price)
-print(product.is_low_stock())
+#print(product.name)
+#print(product.quantity)
+#print(product.price)
+#print(product.is_low_stock())
 
 warehouse = Warehouse()
 warehouse.add_product(product)
 warehouse.add_product(product2)
 warehouse.add_product(product3)
-print(warehouse.products)
-print(len(warehouse.products))
+#print(warehouse.products)
+#print(len(warehouse.products))
 
 #found_product = warehouse.find_product_by_id(1)
 
@@ -54,15 +54,31 @@ print(len(warehouse.products))
 
 #print(warehouse.new_stock(1,20))
 
-low_stock = warehouse.get_low_stock_products()
+#low_stock = warehouse.get_low_stock_products()
 
-for product in low_stock:
+#for product in low_stock:
+    #print(product)
+
+#print(warehouse.get_total_inventory_value())
+
+
+#zero_stock = warehouse.get_out_of_stock_products()
+
+#for product in zero_stock:
+    #print(product)
+
+from database import Database
+
+db = Database()
+
+db.update_product_stock(2, 25)
+
+products = db.get_all_products()
+
+for product in products:
     print(product)
 
-print(warehouse.get_total_inventory_value())
 
+product = db.find_product_by_id(12)
 
-zero_stock = warehouse.get_out_of_stock_products()
-
-for product in zero_stock:
-    print(product)
+print (product)
