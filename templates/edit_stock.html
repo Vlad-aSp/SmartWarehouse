@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Stock</title>
+</head>
+
+<body>
+
+<h1>Edit Stock</h1>
+
+<p><strong>Product:</strong> {{ product.name }}</p>
+
+<p><strong>Current Stock:</strong> {{ product.quantity }}</p>
+
+<form action="/update_stock/{{ product.id }}" method="POST">
+
+    <label>New Stock:</label><br>
+
+    <input
+        type="number"
+        name="new_quantity"
+        value="{{ product.quantity }}"
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Update Stock
+    </button>
+
+</form>
+
+</body>
+
+</html>

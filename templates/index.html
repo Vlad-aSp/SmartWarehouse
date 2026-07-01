@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Smart Warehouse</title>
+    </head>
+    <body>
+
+        <h1>Smart Warehouse Management System</h1>
+        <h2>Products</h2>
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>    
+        <th>Name</th>
+        <th>Category</th>
+        <th>Stock</th>
+        <th>Price</th>
+        <th>Minimum Stock</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for product in products %}
+
+    <tr>
+
+        <td>{{ product.id }}</td>
+
+        <td>{{ product.name }}</td>
+
+        <td>{{ product.category }}</td>
+
+        <td>{{ product.quantity }}</td>
+
+        <td>{{ product.price }}</td>
+
+        <td>{{ product.minimum_stock }}</td>
+
+        <td>
+
+            <a href="/edit_stock/{{ product.id}}">Edit Stock</a>
+            
+                |
+
+            <a href="/delete_product/{{product.id}}">Delete</a>
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<h2>Add Product</h2>
+
+<form action="/add_product" method="POST">
+
+    <label>Name:</label><br>
+    <input type="text" name="name"><br><br>
+
+    <label>Category:</label><br>
+    <input type="text" name="category"><br><br>
+
+    <label>Quantity:</label><br>
+    <input type="number" name="quantity"><br><br>
+
+    <label>Price:</label><br>
+    <input type="number" name="price"><br><br>
+
+    <label>Minimum Stock:</label><br>
+    <input type="number" name="minimum_stock"><br><br>
+
+    <button type="submit">Add Product</button>
+
+</form>
+
+    </body>
+</html>

@@ -3,7 +3,7 @@ from product import Product
 
 class Database:
     def __init__(self):
-        self.connection = sqlite3.connect("warehouse.db")
+        self.connection = sqlite3.connect("warehouse.db" ,check_same_thread=False)
         self.cursor = self.connection.cursor()
 
     def create_table(self):
