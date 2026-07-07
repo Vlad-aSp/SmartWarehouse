@@ -75,7 +75,29 @@ class Database:
             WHERE id = ?
             """, (new_quantity,product_id))
 
-        self.connection.commit()       
+        self.connection.commit()
+
+
+    def search_products(self, search_text):
+        self.cursor.execute("""
+                SELECT * FROM products
+                WHERE name LIKE ?
+                            """, (f"%{search_text}%",))
+
+        rows = self.cursor.fetchall()
+        products =[]
+        for row in rows:
+            product = Product(
+                row[0],
+                row[1],
+                row[2],
+                row[3],
+                row[4],
+                row[5],
+            )
+            products.append(product)
+
+        return products
 
     def find_product_by_id(self, product_id):
         self.cursor.execute("""

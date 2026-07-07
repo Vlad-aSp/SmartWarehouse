@@ -1,78 +1,168 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Warehouse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <main class="page-shell">
+        <header class="top-bar">
+            <div>
+                <p class="eyebrow">Inventory dashboard</p>
+                <h1>Smart Warehouse</h1>
+            </div>
+            <a class="primary-action" href="#add-product">Add Product</a>
+        </header>
 
-<html>
-    <head>
-        <title>Smart Warehouse</title>
-    </head>
-    <body>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <section class="alerts" aria-label="Notifications">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        {% endwith %}
 
-        <h1>Smart Warehouse Management System</h1>
-        <h2>Products</h2>
+        <section class="stats-grid" aria-label="Warehouse summary">
+            <article class="stat-card">
+                <span>Total products</span>
+                <strong>{{ total_products }}</strong>
+            </article>
+            <article class="stat-card">
+                <span>Inventory value</span>
+                <strong>{{ "%.2f"|format(inventory_value) }} RON</strong>
+            </article>
+            <article class="stat-card warning">
+                <span>Low stock</span>
+                <strong>{{ low_stock_products|length }}</strong>
+            </article>
+            <article class="stat-card danger">
+                <span>Out of stock</span>
+                <strong>{{ out_of_stock_products|length }}</strong>
+            </article>
+        </section>
 
-<table border="1">
+        <section class="content-grid">
+            <section class="panel products-panel">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Current inventory</p>
 
-    <tr>
-        <th>ID</th>    
-        <th>Name</th>
-        <th>Category</th>
-        <th>Stock</th>
-        <th>Price</th>
-        <th>Minimum Stock</th>
-        <th>Actions</th>
-    </tr>
+                        <h2>Search Products</h2>
 
-    {% for product in products %}
+    <form action="/" method="GET">
 
-    <tr>
+        <input
+            type="text"
+            name="search"
+            placeholder="Search by product name..."
+            value="{{ request.args.get('search', '') }}"
+        >
 
-        <td>{{ product.id }}</td>
+        <button type="submit">
+            Search
+        </button>
 
-        <td>{{ product.name }}</td>
+    </form>
 
-        <td>{{ product.category }}</td>
+    <br>
+                        <h2>Products</h2>
+                    </div>
+                </div>
 
-        <td>{{ product.quantity }}</td>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Stock</th>
+                                <th>Price</th>
+                                <th>Minimum</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                                <tr>
+                                    <td>{{ product.id }}</td>
+                                    <td>
+                                        <strong>{{ product.name }}</strong>
+                                        {% if product.quantity == 0 %}
+                                            <span class="stock-badge danger">Out</span>
+                                        {% elif product.is_low_stock() %}
+                                            <span class="stock-badge warning">Low</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ product.category }}</td>
+                                    <td>{{ product.quantity }}</td>
+                                    <td>{{ "%.2f"|format(product.price) }} RON</td>
+                                    <td>{{ product.minimum_stock }}</td>
+                                    <td class="actions">
+                                        <a class="button ghost" href="/edit_stock/{{ product.id }}">Stock</a>
+                                        <a
+                                            class="button danger"
+                                            href="/delete_product/{{ product.id }}"
+                                            onclick="return confirm('Are you sure you want to delete this product?')"
+                                        >
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td class="empty-state" colspan="7">No products yet.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-        <td>{{ product.price }}</td>
+            <aside class="panel form-panel" id="add-product">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">New item</p>
+                        <h2>Add Product</h2>
+                    </div>
+                </div>
 
-        <td>{{ product.minimum_stock }}</td>
+                <form action="/add_product" method="POST">
+                    <label>
+                        Name
+                        <input type="text" name="name" placeholder="Laptop stand" required>
+                    </label>
 
-        <td>
+                    <label>
+                        Category
+                        <input type="text" name="category" placeholder="Accessories" required>
+                    </label>
 
-            <a href="/edit_stock/{{ product.id}}">Edit Stock</a>
-            
-                |
+                    <div class="form-row">
+                        <label>
+                            Quantity
+                            <input type="number" name="quantity" min="0" required>
+                        </label>
 
-            <a href="/delete_product/{{product.id}}">Delete</a>
-        </td>
-    </tr>
+                        <label>
+                            Minimum stock
+                            <input type="number" name="minimum_stock" min="0" required>
+                        </label>
+                    </div>
 
-    {% endfor %}
+                    <label>
+                        Price
+                        <input type="number" name="price" min="0" step="0.01" required>
+                    </label>
 
-</table>
-
-<h2>Add Product</h2>
-
-<form action="/add_product" method="POST">
-
-    <label>Name:</label><br>
-    <input type="text" name="name"><br><br>
-
-    <label>Category:</label><br>
-    <input type="text" name="category"><br><br>
-
-    <label>Quantity:</label><br>
-    <input type="number" name="quantity"><br><br>
-
-    <label>Price:</label><br>
-    <input type="number" name="price"><br><br>
-
-    <label>Minimum Stock:</label><br>
-    <input type="number" name="minimum_stock"><br><br>
-
-    <button type="submit">Add Product</button>
-
-</form>
-
-    </body>
+                    <button class="primary-action full-width" type="submit">Add Product</button>
+                </form>
+            </aside>
+        </section>
+    </main>
+</body>
 </html>

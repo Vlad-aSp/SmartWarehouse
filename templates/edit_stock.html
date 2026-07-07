@@ -1,36 +1,91 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Edit Stock</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-
 <body>
+    <main class="page-shell narrow">
+        <header class="top-bar">
+            <div>
+                <p class="eyebrow">Stock control</p>
+                <h1>{{ product.name }}</h1>
+            </div>
+            <a class="button ghost" href="/">Back</a>
+        </header>
 
-<h1>Edit Stock</h1>
+        <section class="panel">
+            <div class="product-summary">
+                <div>
+                    <span>Category</span>
+                    <strong>{{ product.category }}</strong>
+                </div>
+                <div>
+                    <span>Price</span>
+                    <strong>{{ "%.2f"|format(product.price) }} RON</strong>
+                </div>
+                <div>
+                    <span>Minimum stock</span>
+                    <strong>{{ product.minimum_stock }}</strong>
+                </div>
+                <div>
+                    <span>Current stock</span>
+                    <strong>{{ product.quantity }}</strong>
+                </div>
+            </div>
+        </section>
 
-<p><strong>Product:</strong> {{ product.name }}</p>
+        <section class="content-grid two-columns">
+            <section class="panel">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Replace value</p>
+                        <h2>Set Stock</h2>
+                    </div>
+                </div>
 
-<p><strong>Current Stock:</strong> {{ product.quantity }}</p>
+                <form action="/update_stock/{{ product.id }}" method="POST">
+                    <label>
+                        New stock
+                        <input
+                            type="number"
+                            name="new_quantity"
+                            min="0"
+                            value="{{ product.quantity }}"
+                            required
+                        >
+                    </label>
 
-<form action="/update_stock/{{ product.id }}" method="POST">
+                    <button class="primary-action full-width" type="submit">Update Stock</button>
+                </form>
+            </section>
 
-    <label>New Stock:</label><br>
+            <section class="panel">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">Receive products</p>
+                        <h2>Add Stock</h2>
+                    </div>
+                </div>
 
-    <input
-        type="number"
-        name="new_quantity"
-        value="{{ product.quantity }}"
-    >
+                <form action="/add_stock/{{ product.id }}" method="POST">
+                    <label>
+                        Quantity to add
+                        <input
+                            type="number"
+                            name="quantity_to_add"
+                            min="0"
+                            value="0"
+                            required
+                        >
+                    </label>
 
-    <br><br>
-
-    <button type="submit">
-        Update Stock
-    </button>
-
-</form>
-
+                    <button class="primary-action full-width" type="submit">Add Stock</button>
+                </form>
+            </section>
+        </section>
+    </main>
 </body>
-
 </html>

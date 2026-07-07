@@ -116,3 +116,6 @@ class InventoryService:
         product = self.db.find_product_by_id(product_id)
 
         return product is not None
+    
+    def search_products(self,search_text):
+        return self.db.search_products(search_text)
